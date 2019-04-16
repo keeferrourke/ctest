@@ -2,7 +2,6 @@
 *.o
 a.out
 vgcore.*
-docs/*
 lib/*
 obj/*
 **/*build
