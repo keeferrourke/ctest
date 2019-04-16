@@ -15,12 +15,14 @@ addons:
   apt:
     packages:
       - clang-format
-      - meson
   homebrew:
     packages:
       - ninja
       - meson
       - clang-format
+
+install:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then pip3 install meson; fi
 
 script:
   - meson _build
