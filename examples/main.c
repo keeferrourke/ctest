@@ -23,13 +23,14 @@ int main(int argc, char* argv[]) {
     // number of tests at once
     // new tests are added with a function pointer, a name, and an optional
     // description; if the description is to be omitted, you may pass NULL
-    suite_add(s, 2,
-              runner_new(&test_timer, "test_timer",
-                      "Manual benchmark. Requires timespan to be printed "
-                      "manually."),
-              runner_new(&bench_fn, "bench_fn",
-                      "Builtin benchmark (name prefixed by 'bench_')."
-                      "Execution timespan is printed automatically below."));
+    suite_add(
+        s, 2,
+        runner_new(&test_timer, "test_timer",
+                   "Manual benchmark. Requires timespan to be printed "
+                   "manually."),
+        runner_new(&bench_fn, "bench_fn",
+                   "Builtin benchmark (name prefixed by 'bench_')."
+                   "Execution timespan is printed automatically below."));
 
     // suite_add_test is a function that simply appends a test to the list of
     // tests in the suite; could be used to programmatically add tests

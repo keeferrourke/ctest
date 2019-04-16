@@ -156,7 +156,7 @@ int suite_next(suite_t* s, bool fatal_failures) {
 
     /* set up test */
     runner_t* test = s->tests[s->test_index];
-    test_t* t    = tdd_test_new(test->name);
+    test_t*   t    = tdd_test_new(test->name);
 
     bool bench = false;
     if (__hasprefix(test->name, "bench_")) {

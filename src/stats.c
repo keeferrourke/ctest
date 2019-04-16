@@ -14,7 +14,7 @@
 tdd_result_t* tdd_result_new(char* name, bool ok) {
     tdd_result_t* r = malloc(sizeof(tdd_result_t));
 
-    r->name = calloc(strlen(name)+1, sizeof(char));
+    r->name = calloc(strlen(name) + 1, sizeof(char));
     strcpy(r->name, name);
     r->ok = ok;
 
@@ -38,7 +38,7 @@ suite_stats_t* suite_get_stats(suite_t* s) {
 
     int nerr = 0, nfail = 0;
     for (int i = 0; i < s->test_index; i++) {
-        runner_t* t           = s->tests[i];
+        runner_t* t         = s->tests[i];
         stats->tests_run[i] = tdd_result_new(t->name, s->results[i]->failed);
 
         test_t* r = s->results[i];
