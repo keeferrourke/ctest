@@ -1,7 +1,5 @@
 sudo: false
-language: python
-
-python: 3.6
+language: c
 
 os:
   - linux
@@ -23,14 +21,11 @@ addons:
       - meson
       - clang-format
 
-install:
+before_install:
   - |+
       if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-        pip install meson
-        export NINJA_LATEST=$(curl -s https://api.github.com/repos/ninja-build/ninja/releases/latest | grep browser_download_url | cut -d '"' -f 4 | grep ninja-linux.zip)
-        wget "$NINJA_LATEST"
-        unzip -q ninja-linux.zip -d build
-        export PATH="$PWD/build:$PATH"
+        sudo apt-get -q update
+        sudo apt-get -y install meson/xenial-backports
       fi
 
 script:
