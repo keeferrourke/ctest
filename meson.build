@@ -56,7 +56,6 @@ install_headers(project_api_headers)
 lib = library('tdd', install: true, sources: project_sources,
     include_directories: project_includes, dependencies: threads)
 
-configure_file(input: '.clang-format', output: '.clang-format', copy: true)
 run_target('format', command: [
     'clang-format',
     '-i',
