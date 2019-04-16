@@ -1,29 +1,26 @@
 sudo: false
 language: c
 
-matrix:
-  include:
-    - name: "Xenial build"
-      os: linux
-      dist: xenial
-      env: CC=gcc
-      env: CC=clang
-      addons:
-        apt:
-          packages:
-            - ninja
-            - ninja-build
-            - meson
-            - clang-format
-    - name: "masOS 10.14 build"
-      os: osx
-      osx_image: xcode10.2
-      addons:
-        homebrew:
-          packages:
-            - ninja
-            - meson
-            - clang-format
+os:
+  - linux
+  - osx
+dist: xenial
+osx_image: xcode10.2
+
+env:
+  - CC=gcc
+  - CC=clang
+
+addons:
+  apt:
+    packages:
+      - meson
+      - clang-format
+  homebrew:
+    packages:
+      - ninja
+      - meson
+      - clang-format
 
 script:
   - meson setup --prefix=/tmp _build
