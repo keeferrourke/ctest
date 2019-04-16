@@ -1,17 +1,14 @@
 sudo: false
 language: c
 
-compiler:
-  - gcc
-  - clang
-
 matrix:
   include:
-    - env: CC=gcc
-    - env: CC=clang
     - name: "Xenial build"
       os: linux
       dist: xenial
+      compiler:
+        - gcc
+        - clang
       addons:
         apt:
           packages:
@@ -21,6 +18,9 @@ matrix:
     - name: "masOS 10.14 build"
       os: osx
       osx_image: xcode10.2
+      compiler:
+        - gcc
+        - clang
       addons:
         homebrew:
           packages:
