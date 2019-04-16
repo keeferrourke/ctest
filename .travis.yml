@@ -14,8 +14,8 @@ env:
 addons:
   apt:
     packages:
-      - meson
       - clang-format
+      - meson
   homebrew:
     packages:
       - ninja
@@ -23,5 +23,5 @@ addons:
       - clang-format
 
 script:
-  - meson setup --prefix=/tmp _build
-  - ninja -C _build
+  - meson _build
+  - ninja -C _build all
