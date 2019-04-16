@@ -6,21 +6,18 @@ matrix:
     - name: "Xenial build"
       os: linux
       dist: xenial
-      compiler:
-        - gcc
-        - clang
+      env: CC=gcc
+      env: CC=clang
       addons:
         apt:
           packages:
             - ninja
+            - ninja-build
             - meson
             - clang-format
     - name: "masOS 10.14 build"
       os: osx
       osx_image: xcode10.2
-      compiler:
-        - gcc
-        - clang
       addons:
         homebrew:
           packages:
