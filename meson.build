@@ -2,7 +2,8 @@ project('libtdd', 'c', version: '1.0.0', license: 'ISC',
     default_options: [
         'c_std=c99',
 ])
-if (posix_c_source = get_option('posix_c_source')) != ''
+posix_c_source = get_option('posix_c_source')
+if posix_c_source != ''
     add_global_arguments('-D_X_POSIX_C_SOURCE='+posix_c_source,
                          language: 'c')
 endif
@@ -19,7 +20,7 @@ cdata.set('TOP_SRC_DIR', meson.source_root())
 cdata.set('INCLUDE_DIR', join_paths(meson.source_root(), 'include'))
 cdata.set('DOCS_OUTPUT_DIR', join_paths(meson.build_root(), 'docs'))
 cdata.set('README_PATH', join_paths(meson.source_root(), 'REAMDE.md'))
-cdata.set('HAS_DOT', find_program('dot').found() ? 'YES' : 'NO')
+cdata.set('HAS_DOT', find_program('dot', required: false).found() ? 'YES' : 'NO')
 cdata.set('HTML_PAGES', get_option('generate_html_docs') ? 'YES' : 'NO')
 cdata.set('GEN_LATEX', get_option('generate_pdf_docs') ? 'YES' : 'NO')
 if get_option('generate_man_pages')
