@@ -4,7 +4,7 @@ project('libtdd', 'c', version: '1.0.0', license: 'ISC',
 ])
 posix_c_source = get_option('posix_c_source')
 if posix_c_source != ''
-    add_global_arguments('-D_X_POSIX_C_SOURCE='+posix_c_source,
+    add_global_arguments('-D_POSIX_C_SOURCE='+posix_c_source,
                          language: 'c')
 endif
 
