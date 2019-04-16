@@ -1,5 +1,7 @@
 sudo: false
-language: c
+language: python
+
+python: 3.6
 
 os:
   - linux
@@ -22,7 +24,7 @@ addons:
       - clang-format
 
 install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then pip3 install meson; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then pip install meson; fi
 
 script:
   - meson _build
