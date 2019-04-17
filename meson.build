@@ -36,10 +36,11 @@ subdir('include')   # populate project_includes
 
 # if doxygen found, generate documentation
 doxygen = find_program('doxygen', required: false)
+pdflatex = find_program('pdflatex', required: false)
 if doxygen.found()
   cdata.set('HAS_DOT', find_program('dot', required: false).found() ? 'YES' : 'NO')
   cdata.set('HTML_PAGES', get_option('generate_html_docs') ? 'YES' : 'NO')
-  cdata.set('GEN_LATEX', get_option('generate_pdf_docs') ? 'YES' : 'NO')
+  cdata.set('GEN_LATEX', get_option('generate_pdf_docs') and pdflatex.found() ? 'YES' : 'NO')
   if get_option('generate_man_pages')
       cdata.set('MAN_PAGES', 'YES')
       man_dir = join_paths(cdata.get('DOCS_OUTPUT_DIR'), 'man', 'man3')
@@ -47,7 +48,7 @@ if doxygen.found()
   else
       cdata.set('MAN_PAGES', 'NO')
   endif
-  subdir('docs') 
+  subdir('docs')
 endif
 
 project_headers += project_api_headers
