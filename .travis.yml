@@ -15,11 +15,13 @@ addons:
   apt:
     packages:
       - clang-format
+      - cppcheck
   homebrew:
     packages:
       - ninja
       - meson
       - clang-format
+      - cppcheck
 
 before_install:
   - |+
@@ -28,6 +30,9 @@ before_install:
         sudo apt-get -y install meson/xenial-backports
       fi
 
-script:
+before_script:
   - meson _build
+  - ninja -C _build cppcheck
+
+script:
   - ninja -C _build all
