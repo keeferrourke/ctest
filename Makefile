@@ -33,13 +33,14 @@ STD = -std=c99 -D_POSIX_C_SOURCE=199506L
 WD	:= $(PWD)
 INCLDIR	= $(WD)/include
 SRCDIR	= $(WD)/src
-OBJDIR	= $(WD)/obj
-OUTDIR	= $(WD)/lib
+BUILDDIR = $(WD)/_build
+OBJDIR	= $(BUILDDIR)/obj
+OUTDIR	= $(BUILDDIR)/lib
 
 # DOCDIR and TEXDIR must match the appropriate directories specified in the
 # Doxyfile; TEXDIR is a subdirectory of DOCDIR
 DOCDIR = docs
-TEXDIR = latex
+BUILTDOCDIR = $(BUILDDIR)/docs
 
 # library output
 OUTNAME	= libtdd
@@ -86,6 +87,9 @@ $(OBJDIR):
 $(OUTDIR):
 	@mkdir -p $(OUTDIR)
 
+$(BUILTDOCDIR):
+	@mkdir -p $(BUILTDOCDIR)
+
 # generate docs with doxygen
 # this is intended to be used with a Doxyfile that specified LaTeX output
 # modify as required for different documentation formats
@@ -93,24 +97,28 @@ $(OUTDIR):
 # inelegant, but if doxygen fails for some reason, it is not the end of the
 # world
 .PHONY: doc doc-clean
-doc: Doxyfile
+doc: $(BUILTDOCDIR) $(DOCDIR)/Doxyfile.in
+	-@cp $(DOCDIR)/Doxyfile.in Doxyfile
+	-@sed -i "s/@HAS_DOT@/NO/g" Doxyfile
+	-@sed -i "s/@HTML_PAGES@/YES/g" Doxyfile
+	-@sed -i "s/@GEN_LATEX@/NO/g" Doxyfile
+	-@sed -i "s/@MAN_PAGES@/YES/g" Doxyfile
+	-@sed -i "s/@PROJECT_NAME@/$(OUTNAME)/g" Doxyfile
+	-@sed -i "s/@VERSION@//g" Doxyfile
+	-@sed -i "s|@DOCS_OUTPUT_DIR@|$(BUILTDOCDIR)|g" Doxyfile
+	-@sed -i "s|@INCLUDE_DIR@|$(INCLDIR)|g" Doxyfile
+	-@sed -i "s|@README_PATH|README.md|g" Doxyfile
 	 @doxygen 2>/dev/null 1>&2
-	-@echo 'Generating application internal documentation...'
-#	generate PDF from LaTeX sources
-	-@cd $(DOCDIR)/$(TEXDIR) && $(MAKE) 2>/dev/null 1>&2
-	-@mv $(DOCDIR)/$(TEXDIR)/refman.pdf $(DOCDIR)
+	-@rm Doxyfile
 	-@echo 'Generated application internal documentation.'
 
 doc-clean:
-	-@rm -r $(DOCDIR)/$(TEXDIR)
-
-$(DOCDIR):
-	@mkdir -p $(DOCDIR)
+	-@rm -r $(BUILTDDOCDIR)
 
 # clean entire project directory
 .PHONY: clean cleaner
 clean:
-	-@rm -rf $(OBJDIR) $(DOCDIR)
+	-@rm -rf $(OBJDIR)
 
 cleaner:
 	-@rm -rf $(OUTDIR)

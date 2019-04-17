@@ -19,7 +19,7 @@ cdata.set('VERSION', meson.project_version())
 cdata.set('TOP_SRC_DIR', meson.source_root())
 cdata.set('INCLUDE_DIR', join_paths(meson.source_root(), 'include'))
 cdata.set('DOCS_OUTPUT_DIR', join_paths(meson.build_root(), 'docs'))
-cdata.set('README_PATH', join_paths(meson.source_root(), 'REAMDE.md'))
+cdata.set('README_PATH', join_paths(meson.source_root(), 'README.md'))
 
 threads = dependency('threads')
 
