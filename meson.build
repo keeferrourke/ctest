@@ -30,8 +30,11 @@ project_includes = []
 project_objects = []
 example_sources = []
 
-subdir('src')       # populate project_sources
-subdir('include')   # populate project_includes
+src_dir = 'src'
+include_dir = 'include'
+
+subdir(src_dir)       # populate project_sources
+subdir(include_dir)   # populate project_includes
 
 
 # if doxygen found, generate documentation
@@ -64,6 +67,17 @@ run_target('format', command: [
     project_sources,
     project_headers,
     example_sources
+])
+
+run_target('cppcheck', command: [
+    'cppcheck',
+    '--enable=all',
+    '--language=c',
+    '--std='+get_option('c_std'),
+    '--suppress=missingInclude',
+    '--suppress=unusedFunction',
+    src_dir,
+    '-i', include_dir
 ])
 
 subdir('examples')
