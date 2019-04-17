@@ -1,13 +1,16 @@
 libtdd
 ======
 
+![repo ci status](https://img.shields.io/travis/keeferrourke/libtdd.svg)
+![dev ci status](https://img.shields.io/travis/com/keeferrourke/libtdd/development.svg?label=build%20%28dev%29)
+
 `libtdd` is a minimalist testing framework inspired by the Golang
 testing pkg. It is designed to provide a framework which may be used to
 build scaffolding during Test Driven Development (TDD).
 
-This small C library attempts to provide a consistent API for creating,
-running, and checking the results of tests. There is very little
-boilerplate required in the main function.
+This small C library attempts to provide a simple, featureful API for
+creating, running, and checking the results of tests.  Simply declare
+test functions, add them to a suite in your `main()`, compile and run :)
 
 
 Features
@@ -20,10 +23,10 @@ Features
  * Catch and count crashes (SIGSEGV handler)
 
 
-Build and usage
----------------
+Build and Installation
+----------------------
 
-### Meson
+### Meson (Ninja)
 
 To build this library, run
 
@@ -34,6 +37,9 @@ To install the library and documentation, run
 
     ninja -C _build all docs install
 
+Builds have been tested for Fedora 29 Workstation, Ubuntu 16.04, and
+macOS Mojave with both `clang` and `gcc`.
+
 #### Build options
 
 Build options are detailed in the `meson_options.txt` file.
@@ -41,49 +47,41 @@ You may modify them there as required.
 
 ### Make
 
-The Makefile included with this project creates static and dynamic
-libraries in the `lib/` directory. To build this, simply run:
-
-    make lib    # libtdd.a
-    make dylib  # libtdd.so (or libtdd.dylib on macOS/Darwin)
-
-Colour output support can be enabled at compile time by including the
-`DEFINE=-DUSE_COLOUR` directive on the `make` line. ex.
-
-    make dylib DEFINE=-DUSE_COLOUR  # enables pretty colour printing
-
-You can then include the outputted `libtdd.so` or `libtdd.a` in your
-project as is required.
-
-API documentation can be compiled with Doxygen and LaTeX via:
-
-    make docs
-
-See the Makefile for other relevant build targets.
-
-**NOTE** macOS/Darwin support is untested at this time.
-This library was built and tested on Fedora 27 Workstation with glibc
-v2.26.
+This project was originally built with GNU Make before I migrated to
+Meson/Ninja. The included Makefile will not be updated, but also won't
+be removed in the foreseeable future.
 
 
-Example program
----------------
+Usage
+-----
+
+### Documentation
+
+This library is extensively documented. You can generate the
+documentation with `doxygen`.
+
+Documentation is provided in the following formats:
+
+ - HTML
+ - PDF (requires `LaTeX`)
+ - man pages (run `man -m _build/docs/man $page` to view)
+
+To build the documentation, run the following:
+
+    ninja -C _build docs
+
+It will be output to `_build/docs`.
+
+### Example program
 
 A simple example program that demonstrates all features provided by this
 library can be found in the `examples/` directory of this project.
 
-It can be compiled and run as follows:
+It is built as part of the default build target,
 
-    make lib
-    cc -o tdd_example -std=c99 -Iinclude examples/main.c -pthread \
-       -Llib -ltdd
-    ./tdd_example
+### Conventions to follow
 
-
-Conventions
------------
-
-### Testing
+#### Test functions
 
 Every testing function is defined as a `void* test_myfunc(void* t)`
 where the parameter `t` is a `test_t` that records information about
@@ -108,12 +106,12 @@ and the end the test can be similarly flagged by `test_timer_end(t)`,
 if the name of your test is prefixed by `bench_` then these functions
 will be called for you automatically.
 
-### Benchmarking
+#### Benchmarked functions
 
-If benchmarking, then for convenience, the `test_timer_start(t)` and
-`test_timer_end(t)` function calls may be omitted within a test body if
+If benchmarking a test, then the `test_timer_start(t)` and
+`test_timer_end(t)` function calls will automatically be called if
 the test name is prefixed by `bench_`. These times will be automatically
-recorded by the suite.
+recorded by the suite and reported at the end.
 
 Calls to `test_timer_start(t)` and `test_timer_end(t)` may still be made
 to override the start and end times if the benchmarks require setup and
@@ -123,7 +121,7 @@ i.e. a benchmarking function may be simply defined as
 
     void* bench_func(void* t) {
         ...
-        return;
+        return NULL;
     }
 
 and can be added to a test suite as a benchmarking function by
@@ -134,17 +132,19 @@ After execution of each benchmark function, a short summary of runtime
 is printed.
 
 
-Bugs and future development
----------------------------
+Future development
+------------------
 
-No bugs to speak of at this moment :)
+There are no bugs to speak of at the moment :)
 
-Future development:
+### Possible feature work
 
  * It might be nice to optionally run tests in parallel; currently all
-   tests run sequentially in the order they are added to the suite.
+   tests run sequentially in the order they are added to the suite
  * I'll probably factor out the reporter interface so that new reporters
    can be written and used to display results
+ * It might be good to specify how long a benchmarked function has to
+   run before it might be considered a failure due to poor performance
 
 
 License information
@@ -152,8 +152,8 @@ License information
 
 Copyright (c) 2018-2019 Keefer Rourke <mail@krourke.org>
 
-This software is released under the ISC License. See LICENSE for more
-details.
+This software is released under the ISC License. See [LICENSE](LICENSE)
+for more details.
 
 
 Alternatives
